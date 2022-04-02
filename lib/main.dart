@@ -1,9 +1,14 @@
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
-  runApp(const MaterialApp(home: MyApp()));
+
+Future main() async {
+    await DotEnv.load(fileName: ".env");
+    runApp(const MaterialApp(home: MyApp()));
 }
+
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -13,13 +18,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  static String consumerApiKey = "3CSWEz90VoTSuHHQjc7DQgvwQ";
-  static String consumerApiSecret =
-      "gTwuNxcnThwDchRZ6cq3nS9VX5Hja8iAWkF6OMnXQaSWza6QdE";
-  static String accessToken =
-      "1284682835559944193-tF0gpkzODSpQiJnjevgumsB2i0R40E";
-  static String accessTokenSecret =
-      "pUsnhepYa6cRywfFkdNcmgxLPZTXvyXhndp26cTdUIcb9";
+  static String consumerApiKey = env['CONSUMER_KEY']!;
+  static String consumerApiSecret = env['CONSUMER_KEY_SECRET']!;
+  static String accessToken =env['ACCESS_TOKEN']!;
+  static String accessTokenSecret =env['ACCESS_TOKEN_SECRET']!;
 
   final twitterApi = TwitterApi(
       client: TwitterClient(
