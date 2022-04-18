@@ -50,7 +50,7 @@ class _MyHomeState extends State<MyHome> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         image: const DecorationImage(
-          image: AssetImage('assets/london.jpg'),
+          image: AssetImage('assets/hashtag.jpg'),
           fit: BoxFit.cover,
         ),
       ),

@@ -76,26 +76,28 @@ class _ResultState extends State<Result> {
   Widget build(BuildContext context) {
     return isLoading
         ? Center(
-            child: Scaffold(
-            appBar: AppBar(
-              title: Text(widget.country),
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Hero(
-                    tag: 'logo',
-                    child: CircleAvatar(
-                      backgroundImage:
-                          AssetImage('assets/${widget.country}.jpeg'),
-                      maxRadius: 30,
-                      minRadius: 20,
-                    ),
+          child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.black,
+            title: Text(widget.country),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Hero(
+                  tag: 'logo',
+                  child: CircleAvatar(
+                    backgroundImage:
+                        AssetImage('assets/${widget.country}.jpeg'),
+                    maxRadius: 30,
+                    minRadius: 20,
                   ),
                 ),
-              ],
+              ),
+            ],
+          ),
+          body: const Center(child: CircularProgressIndicator()),
             ),
-            body: const Center(child: CircularProgressIndicator()),
-          ))
+        )
         : SafeArea(
             child: Container(
               decoration: BoxDecoration(
@@ -106,6 +108,7 @@ class _ResultState extends State<Result> {
               ),
               child: Scaffold(
                 appBar: AppBar(
+                  backgroundColor: Colors.black,
                   title: Text(widget.country),
                   actions: [
                     Padding(
@@ -138,7 +141,12 @@ class _ResultState extends State<Result> {
                         ],
                       ),
                       child: ListTile(
-                        leading: Text((index + 1).toString()),
+                        leading: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text((index + 1).toString(),style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,),),
+                          ],
+                        ),
                         title: Text(
                           trends[index],
                           style: const TextStyle(fontSize: 25),
@@ -150,10 +158,7 @@ class _ResultState extends State<Result> {
                             Text(x.toString() != "null"
                                 ? x.toString()
                                 : "Under 10k"),
-                            const SizedBox(height: 10),
-                            Container(
-                              height: 40,
-                            )
+
                           ],
                         ),
                       ),
