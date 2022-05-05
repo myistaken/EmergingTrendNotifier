@@ -31,8 +31,10 @@ dependencies:
   dart_sentiment: ^0.0.9
   flutter_spinkit: ^5.1.0
   http: ^0.13.4
-  just_audio: ^0.9.20
-
+  just_audio: ^0.9.21
+  firebase_core: ^1.16.0
+  firebase_auth: ^3.3.17
+  cloud_firestore: ^3.1.14
   flutter:
     sdk: flutter
 

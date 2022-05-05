@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:trenifyv1/home_page.dart';
 import 'package:just_audio/just_audio.dart';
 
+import 'dataBase/authantication.dart';
+
 class MyLogin extends StatefulWidget {
   const MyLogin({Key? key}) : super(key: key);
 
@@ -23,6 +25,9 @@ class _MyLoginState extends State<MyLogin> {
     player.dispose();
     super.dispose();
   }
+
+  final myController = TextEditingController();
+  final myControllerPw = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +58,7 @@ class _MyLoginState extends State<MyLogin> {
                       child: Column(
                         children: [
                           TextField(
+                            controller: myController,
                             style: const TextStyle(color: Colors.black),
                             decoration: InputDecoration(
                                 fillColor: Colors.grey.shade100,
@@ -66,6 +72,7 @@ class _MyLoginState extends State<MyLogin> {
                             height: 30,
                           ),
                           TextField(
+                            controller: myControllerPw,
                             style: const TextStyle(),
                             obscureText: true,
                             decoration: InputDecoration(
@@ -91,12 +98,32 @@ class _MyLoginState extends State<MyLogin> {
                                   onPressed: () async {
                                     await player.setAsset('assets/cikcik.mp3');
                                     player.play();
-
-                                    Navigator.push(
+                                    var signing = await Authentication().logIn(
+                                        myController.text, myControllerPw.text);
+                                    if (signing == 'true') {
+                                      Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                const MyHome()));
+                                          builder: (context) {
+                                            return const MyHome();
+                                          },
+                                        ),
+                                      );
+                                    } else {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            content: Text(signing),
+                                          );
+                                        },
+                                      );
+                                    }
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) =>
+                                    //             const MyHome()));
                                   },
                                   child: const SizedBox(
                                     width: 0,

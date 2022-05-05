@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "803686452685",
+    "project_id": "trenify-e27a0",
+    "storage_bucket": "trenify-e27a0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:803686452685:android:ba3156a54ed9f9c3578884",
+        "android_client_info": {
+          "package_name": "com.example.tw_trend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "803686452685-dchhcn963amv5n6ktnsh0g97ms2n9596.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tw_trend",
+            "certificate_hash": "c4e828073d8a8df891be73b4350d9511540f8294"
+          }
+        },
+        {
+          "client_id": "803686452685-ik06qsbsv9jp8vq67jmdkl7m1pga8vhg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASm3ocOnZQDmMEpfpJzZJerXvATRPUz_I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "803686452685-ik06qsbsv9jp8vq67jmdkl7m1pga8vhg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
