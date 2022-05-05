@@ -32,4 +32,21 @@ class Authentication {
       return e.toString();
     }
   }
+  Future<String> forgotPassword(String email) async {
+    try {
+      await _fireAuth.sendPasswordResetEmail(email: email);
+      return 'true';
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  Future<String> logOut() async {
+    try {
+      await _fireAuth.signOut();
+      return 'true';
+    } catch (e) {
+      return e.toString();
+    }
+  }
 }
