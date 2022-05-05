@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:trenifyv1/dataBase/firestore_data.dart';
+
+import 'dataBase/authantication.dart';
+import 'home_page.dart';
 
 class MyRegister extends StatefulWidget {
   const MyRegister({Key? key}) : super(key: key);
@@ -8,6 +12,10 @@ class MyRegister extends StatefulWidget {
 }
 
 class _MyRegisterState extends State<MyRegister> {
+  final myControllerName = TextEditingController();
+  final myControllerEmail = TextEditingController();
+  final myControllerPassword = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,7 +41,10 @@ class _MyRegisterState extends State<MyRegister> {
             SingleChildScrollView(
               child: Container(
                 padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.28),
+                    top: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.28),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -42,6 +53,7 @@ class _MyRegisterState extends State<MyRegister> {
                       child: Column(
                         children: [
                           TextField(
+                            controller: myControllerName,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
@@ -66,6 +78,7 @@ class _MyRegisterState extends State<MyRegister> {
                             height: 30,
                           ),
                           TextField(
+                            controller: myControllerEmail,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
@@ -90,6 +103,7 @@ class _MyRegisterState extends State<MyRegister> {
                             height: 30,
                           ),
                           TextField(
+                            controller: myControllerPassword,
                             style: const TextStyle(color: Colors.white),
                             obscureText: true,
                             decoration: InputDecoration(
@@ -129,7 +143,34 @@ class _MyRegisterState extends State<MyRegister> {
                                 backgroundColor: const Color(0xff4c505b),
                                 child: IconButton(
                                     color: Colors.white,
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      String signUp = await Authentication()
+                                          .signUp(myControllerEmail.text,
+                                          myControllerPassword.text);
+                                      if (signUp == 'true') {
+                                        FireStore().addUser(
+                                            name: myControllerName.text,
+                                            email: myControllerEmail.text,
+                                            password: myControllerPassword.text);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) {
+                                              return const MyHome();
+                                            },
+                                          ),
+                                        );
+                                      }else {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              content: Text(signUp),
+                                            );
+                                          },
+                                        );
+                                      }
+                                    },
                                     icon: const Icon(
                                       Icons.arrow_forward,
                                     )),

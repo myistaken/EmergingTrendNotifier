@@ -15,4 +15,21 @@ class Authentication {
       return e.toString();
     }
   }
+  Future<String> signUp(String email, String password) async {
+    try {
+      await _fireAuth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      return 'true';
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        return 'Weak password, try stronger one';
+      } else if (e.code == 'email-already-in-use') {
+        return 'The e-mail has been used before';
+      } else {
+        return e.message!;
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
 }
