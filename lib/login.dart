@@ -14,6 +14,7 @@ class MyLogin extends StatefulWidget {
 
 class _MyLoginState extends State<MyLogin> {
   late AudioPlayer player;
+  int ind=1;
 
   @override
   void initState() {
@@ -54,6 +55,20 @@ class _MyLoginState extends State<MyLogin> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    TextButton(onPressed: (){
+                      setState(() {
+                        print("object: "+player.volume.toString());
+                      if(ind==1){
+                          ind=0;
+
+                      }else{
+                          ind=1;
+                      }
+
+                        player.setVolume(ind.toDouble());
+                      });
+
+                    }, child: Container(margin: const EdgeInsets.only(left: 35, right: 35),child: Text(ind!=1?"🔇":"🔉",style: TextStyle(fontSize: 40),))),
                     Container(
                       margin: const EdgeInsets.only(left: 35, right: 35),
                       child: Column(
