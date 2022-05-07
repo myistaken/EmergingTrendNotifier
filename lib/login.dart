@@ -3,6 +3,7 @@ import 'package:trenifyv1/home_page.dart';
 import 'package:just_audio/just_audio.dart';
 
 import 'dataBase/authantication.dart';
+import 'forgot_password.dart';
 
 class MyLogin extends StatefulWidget {
   const MyLogin({Key? key}) : super(key: key);
@@ -158,7 +159,13 @@ class _MyLoginState extends State<MyLogin> {
                                 ),
                               ),
                               TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                 ForgotPassword()));
+                                  },
                                   child: const Text(
                                     'Forgot Password',
                                     style: TextStyle(
