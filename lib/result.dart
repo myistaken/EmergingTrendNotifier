@@ -1,10 +1,11 @@
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class Result extends StatefulWidget {
-  String woeid, country;
+  String woeid, country,countryCode;
 
-  Result({Key? key, required this.country, required this.woeid})
+  Result({Key? key, required this.country, required this.woeid,required this.countryCode})
       : super(key: key);
 
   @override
@@ -85,11 +86,13 @@ class _ResultState extends State<Result> {
                 padding: const EdgeInsets.all(8.0),
                 child: Hero(
                   tag: 'logo',
-                  child: CircleAvatar(
-                    backgroundImage:
-                        AssetImage('assets/${widget.country}.jpeg'),
-                    maxRadius: 30,
-                    minRadius: 20,
+                  child: SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: SvgPicture.asset(
+                      'assets/countries/${widget.countryCode.toString().toLowerCase()}.svg',
+                      allowDrawingOutsideViewBox: true,
+                    ),
                   ),
                 ),
               ),
@@ -102,9 +105,7 @@ class _ResultState extends State<Result> {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                    image: AssetImage('assets/${widget.country}.jpeg'),
-                    fit: BoxFit.cover),
+
               ),
               child: Scaffold(
                 appBar: AppBar(
@@ -113,11 +114,10 @@ class _ResultState extends State<Result> {
                   actions: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: CircleAvatar(
-                        backgroundImage:
-                            AssetImage('assets/${widget.country}.jpeg'),
-                        maxRadius: 30,
-                        minRadius: 20,
+                      child: SvgPicture.asset(
+                        'assets/countries/${widget.countryCode.toString().toLowerCase()}.svg',
+                        allowDrawingOutsideViewBox: true,
+                        width: 30,
                       ),
                     ),
                   ],
@@ -144,12 +144,12 @@ class _ResultState extends State<Result> {
                         leading: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text((index + 1).toString(),style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,),),
+                            Text((index + 1).toString(),style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),),
                           ],
                         ),
                         title: Text(
                           trends[index],
-                          style: const TextStyle(fontSize: 25),
+                          style: const TextStyle(fontSize: 25,color: Colors.black),
                         ),
                         subtitle: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -157,7 +157,7 @@ class _ResultState extends State<Result> {
                           children: <Widget>[
                             Text(x.toString() != "null"
                                 ? x.toString()
-                                : "Under 10k"),
+                                : "Under 10k",style: TextStyle(color:Colors.black),),
 
                           ],
                         ),
