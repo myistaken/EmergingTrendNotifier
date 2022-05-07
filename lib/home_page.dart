@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trenifyv1/Settings/settings.dart';
+import 'package:trenifyv1/settings.dart';
 import 'package:trenifyv1/login.dart';
 import 'result.dart';
 
