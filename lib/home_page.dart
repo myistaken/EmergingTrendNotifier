@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:trenifyv1/Settings/settings.dart';
+import 'package:trenifyv1/login.dart';
 import 'result.dart';
 
 class MyHome extends StatefulWidget {
@@ -46,60 +47,95 @@ class _MyHomeState extends State<MyHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        image: const DecorationImage(
-          image: AssetImage('assets/hashtag.jpg'),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Hero(
-          tag: 'logo',
-          child: Center(
-            child: GridView.builder(
-              itemCount: images.length,
-              itemBuilder: (BuildContext context, int index) {
-                return TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Result(
-                                    country: countries[index],
-                                    woeid: woeids[index],
-                                  )));
-                    },
-                    child: Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: CircleAvatar(
-                            backgroundImage: AssetImage(
-                              images[index],
-                            ),
-                            maxRadius: 40,
-                          ),
-                        ),
-                        Text(
-                          countries[index],
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ],
-                    ));
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('C-Trend'),
+          elevation: 1,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => MyLogin()));
+            },
+          ),
+          actions: [
+            /*
+          IconButton(
+              icon: const Icon(Icons.lightbulb),
+              onPressed: () {
+                
+              }),*/
+            IconButton(
+              icon: Icon(
+                Icons.settings,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => SettingsPage()));
               },
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, mainAxisSpacing: 10, crossAxisSpacing: 10),
-              padding: const EdgeInsets.all(10),
-              shrinkWrap: true,
+            ),
+          ],
+        ),
+        body: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            image: const DecorationImage(
+              image: AssetImage('assets/hashtag.jpg'),
+              fit: BoxFit.cover,
             ),
           ),
-        ),
-      ),
-    );
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Hero(
+              tag: 'logo',
+              child: Center(
+                child: GridView.builder(
+                  itemCount: images.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Result(
+                                        country: countries[index],
+                                        woeid: woeids[index],
+                                      )));
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: CircleAvatar(
+                                backgroundImage: AssetImage(
+                                  images[index],
+                                ),
+                                maxRadius: 40,
+                              ),
+                            ),
+                            Text(
+                              countries[index],
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ));
+                  },
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10),
+                  padding: const EdgeInsets.all(10),
+                  shrinkWrap: true,
+                ),
+              ),
+            ),
+          ),
+        ));
   }
 }
