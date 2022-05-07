@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trenifyv1/forgot_password.dart';
 
 import 'home_page.dart';
 
@@ -30,7 +31,10 @@ class _SettingsPageState extends State<SettingsPage> {
             elevation: 1,
             leading: IconButton(
               onPressed: () {
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>const MyHome()), (route) => false);
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MyHome()),
+                    (route) => false);
               },
               icon: const Icon(
                 Icons.arrow_back,
@@ -73,11 +77,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   height: 10,
                 ),
                 buildAccountOptionRow(context, "Change password"),
-                buildAccountOptionRow(context, "Language"),
+                //   buildAccountOptionRow(context, "Language"),
                 const SizedBox(
                   height: 40,
                 ),
-                Row(
+                /*Row(
                   children: [
                     const Icon(
                       Icons.volume_up_outlined,
@@ -99,7 +103,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           });
                         }),
                   ],
-                ),
+                ),*/
                 const Divider(
                   height: 15,
                   thickness: 2,
@@ -158,30 +162,52 @@ class _SettingsPageState extends State<SettingsPage> {
     return GestureDetector(
       onTap: () {
         showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text(title),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text("Option 1"),
-                  ],
-                ),
-                actions: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.teal,
-                        fixedSize: const Size.fromWidth(100),
-                        padding: const EdgeInsets.all(10)),
-                    child: const Text("Close"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(title),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "Do You Want to Change\nYour Password?",
+                    textAlign: TextAlign.center,
                   ),
                 ],
-              );
-            });
+              ),
+              actions: [
+                SizedBox(width: 5),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.teal,
+                      fixedSize: const Size.fromWidth(100),
+                      padding: const EdgeInsets.all(10)),
+                  child: const Text("YES"),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ForgotPassword()),
+                    );
+                  },
+                ),
+                SizedBox(
+                  width: 40,
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.teal,
+                      fixedSize: const Size.fromWidth(100),
+                      padding: const EdgeInsets.all(10)),
+                  child: const Text("NO"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                SizedBox(width: 5),
+              ],
+            );
+          },
+        );
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),

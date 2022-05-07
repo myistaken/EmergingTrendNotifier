@@ -1,5 +1,7 @@
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:flutter/material.dart';
+import 'package:trenifyv1/settings.dart';
+import 'package:trenifyv1/theme_class.dart';
 
 class Result extends StatefulWidget {
   String woeid, country;
@@ -75,28 +77,33 @@ class _ResultState extends State<Result> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? Center(
-          child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.black,
-            title: Text(widget.country),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Hero(
-                  tag: 'logo',
-                  child: CircleAvatar(
-                    backgroundImage:
-                        AssetImage('assets/${widget.country}.jpeg'),
-                    maxRadius: 30,
-                    minRadius: 20,
+        ? MaterialApp(
+          theme: SettingsPage.isDark
+              ? ThemeClass().lightTheme
+              : ThemeClass().darkTheme,
+          home: Center(
+            child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.black,
+              title: Text(widget.country),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Hero(
+                    tag: 'logo',
+                    child: CircleAvatar(
+                      backgroundImage:
+                          AssetImage('assets/${widget.country}.jpeg'),
+                      maxRadius: 30,
+                      minRadius: 20,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          body: const Center(child: CircularProgressIndicator()),
+              ],
             ),
+            body: const Center(child: CircularProgressIndicator()),
+              ),
+          ),
         )
         : SafeArea(
             child: Container(
@@ -130,7 +137,7 @@ class _ResultState extends State<Result> {
                       margin: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 20),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: SettingsPage.isDark ? Colors.white:Colors.grey,
                         borderRadius: BorderRadius.circular(13),
                         boxShadow: [
                           BoxShadow(
