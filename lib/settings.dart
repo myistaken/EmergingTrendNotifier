@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trenifyv1/forgot_password.dart';
+import 'package:trenifyv1/login.dart';
 
 import 'home_page.dart';
 
@@ -77,6 +78,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   height: 10,
                 ),
                 buildAccountOptionRow(context, "Change password"),
+                buildAccountOptionRow(context, "Log Out"),
                 //   buildAccountOptionRow(context, "Language"),
                 const SizedBox(
                   height: 40,
@@ -169,8 +171,10 @@ class _SettingsPageState extends State<SettingsPage> {
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    "Do You Want to Change\nYour Password?",
+                  Text(
+                    title == 'Log Out'
+                        ? "Do You Want to\n Log Out?"
+                        : "Do You Want to Change\nYour Password?",
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -184,10 +188,18 @@ class _SettingsPageState extends State<SettingsPage> {
                       padding: const EdgeInsets.all(10)),
                   child: const Text("YES"),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ForgotPassword()),
-                    );
+                    if (title == "Log Out") {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => MyLogin()),
+                          (route) => false);
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ForgotPassword()),
+                      );
+                    }
                   },
                 ),
                 SizedBox(
