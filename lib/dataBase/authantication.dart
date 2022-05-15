@@ -12,9 +12,26 @@ class Authentication {
           email: email, password: password);
       return 'true';
     } catch (e) {
-      return e.toString();
+      print(e.toString());
+      return e.toString() ==
+              "[firebase_auth/unknown] Given String is empty or null"
+          ? "Given String is empty.\nFill The Blanks!"
+          : (e.toString() ==
+                  "[firebase_auth/invalid-email] The email address is badly formatted."
+              ? "e-mail address is formatted badly.\nTry it again!"
+              : (e.toString() ==
+                      "[firebase_auth/wrong-password] The password is invalid or the user does not have a password."
+                  ? "The password is invalid or the user does not have a password!"
+                  : (e.toString() ==
+                          "[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted."
+                      ? "There is no user record corresponding to this identifier.\n\nThe user may have been deleted!"
+                      : (e.toString() ==
+                              "[firebase_auth/too-many-requests] We have blocked all requests from this device due to unusual activity. Try again later."
+                          ? "We have blocked all requests from this device due to unusual activity.\n\nTry again later!!"
+                          : e.toString()))));
     }
   }
+
   Future<String> signUp(String email, String password) async {
     try {
       await _fireAuth.createUserWithEmailAndPassword(
@@ -32,6 +49,7 @@ class Authentication {
       return e.toString();
     }
   }
+
   Future<String> forgotPassword(String email) async {
     try {
       await _fireAuth.sendPasswordResetEmail(email: email);

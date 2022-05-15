@@ -129,7 +129,7 @@ class _MyLoginState extends State<MyLogin> {
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
-                                            content: Text(signing),
+                                            content: Text(signing,textAlign: TextAlign.center,),
                                           );
                                         },
                                       );
