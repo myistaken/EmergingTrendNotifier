@@ -28,7 +28,7 @@ class Authentication {
                       : (e.toString() ==
                               "[firebase_auth/too-many-requests] We have blocked all requests from this device due to unusual activity. Try again later."
                           ? "We have blocked all requests from this device due to unusual activity.\n\nTry again later!!"
-                          : e.toString()))));
+                          : "Something went wrong.\n\nTry again!!"))));
     }
   }
 
