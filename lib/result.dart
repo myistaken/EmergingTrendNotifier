@@ -1,11 +1,16 @@
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:trenifyv1/search_page.dart';
 
 class Result extends StatefulWidget {
-  String woeid, country,countryCode;
+  String woeid, country, countryCode;
 
-  Result({Key? key, required this.country, required this.woeid,required this.countryCode})
+  Result(
+      {Key? key,
+      required this.country,
+      required this.woeid,
+      required this.countryCode})
       : super(key: key);
 
   @override
@@ -77,35 +82,34 @@ class _ResultState extends State<Result> {
   Widget build(BuildContext context) {
     return isLoading
         ? Center(
-          child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.black,
-            title: Text(widget.country),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Hero(
-                  tag: 'logo',
-                  child: SizedBox(
-                    width: 30,
-                    height: 30,
-                    child: SvgPicture.asset(
-                      'assets/countries/${widget.countryCode.toString().toLowerCase()}.svg',
-                      allowDrawingOutsideViewBox: true,
+            child: Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.black,
+                title: Text(widget.country),
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Hero(
+                      tag: 'logo',
+                      child: SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: SvgPicture.asset(
+                          'assets/countries/${widget.countryCode.toString().toLowerCase()}.svg',
+                          allowDrawingOutsideViewBox: true,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-          body: const Center(child: CircularProgressIndicator()),
+              body: const Center(child: CircularProgressIndicator()),
             ),
-        )
+          )
         : SafeArea(
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-
               ),
               child: Scaffold(
                 appBar: AppBar(
@@ -126,40 +130,60 @@ class _ResultState extends State<Result> {
                 body: ListView.builder(
                   itemBuilder: (BuildContext context, int index) {
                     x = volumes[index];
-                    return Container(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(13),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.grey[200]!,
-                              blurRadius: 10,
-                              spreadRadius: 3,
-                              offset: const Offset(3, 4))
-                        ],
-                      ),
-                      child: ListTile(
-                        leading: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text((index + 1).toString(),style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),),
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          SearchPage.twitterList.clear();
+                        });
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SearchPage(trends[index])));
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(13),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey[200]!,
+                                blurRadius: 10,
+                                spreadRadius: 3,
+                                offset: const Offset(3, 4))
                           ],
                         ),
-                        title: Text(
-                          trends[index],
-                          style: const TextStyle(fontSize: 25,color: Colors.black),
-                        ),
-                        subtitle: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(x.toString() != "null"
-                                ? x.toString()
-                                : "Under 10k",style: TextStyle(color:Colors.black),),
-
-                          ],
+                        child: ListTile(
+                          leading: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                (index + 1).toString(),
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              ),
+                            ],
+                          ),
+                          title: Text(
+                            trends[index],
+                            style: const TextStyle(
+                                fontSize: 25, color: Colors.black),
+                          ),
+                          subtitle: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                x.toString() != "null"
+                                    ? x.toString()
+                                    : "Under 10k",
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );
