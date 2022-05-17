@@ -163,7 +163,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ],
         ),
-        body: ListView(
+        body: isLoading ? Center(child: CircularProgressIndicator()) :ListView(
           children: List.generate(
             selectedValue,
             (index) => ListTile(
