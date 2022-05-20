@@ -1,6 +1,7 @@
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:trenifyv1/settings.dart';
 
 class SearchPage extends StatefulWidget {
   String tweetItself = "";
@@ -197,7 +198,7 @@ class _SearchPageState extends State<SearchPage> {
                   Text(
                     SearchPage.twitterList[index].fullText,
                     overflow: TextOverflow.clip,
-                    style: TextStyle(color: Colors.black),
+                    style: SettingsPage.isDark ? TextStyle(color: Colors.black) :TextStyle(color: Colors.white) ,
                   ),
                   SizedBox(
                     height: 10,
@@ -208,19 +209,19 @@ class _SearchPageState extends State<SearchPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Icon(Icons.search_off),
+                          Icon(Icons.search_off,color: Colors.cyan,),
                           Text(
                             '${widget.tweetItself}',
-                            style: TextStyle(color: Colors.black),
+                            style:  SettingsPage.isDark ? TextStyle(color: Colors.black) :TextStyle(color: Colors.white),
                           ),
                         ],
                       ),
                       Row(
                         children: [
-                          Icon(Icons.repeat),
+                          Icon(Icons.repeat,color: Colors.cyan,),
                           Text(
                             '${SearchPage.twitterList[index].retweetCount}',
-                            style: TextStyle(color: Colors.black),
+                            style:  SettingsPage.isDark ? TextStyle(color: Colors.black) :TextStyle(color: Colors.white),
                           ),
                         ],
                       ),
