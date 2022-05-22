@@ -95,7 +95,7 @@ class ForgotPassword extends StatelessWidget {
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
-                                        content: Text(forgotPassword),
+                                        content: Text(forgotPassword,textAlign: TextAlign.center,),
                                       );
                                     },
                                   );
