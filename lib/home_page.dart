@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -19,49 +20,24 @@ class MyHome extends StatefulWidget {
 }
 
 class _MyHomeState extends State<MyHome> {
-  late List data;
+  late List data=[];
 
   Future<String> loadJsonData() async {
     var jsonText = await rootBundle.loadString('assets/woeid.json');
     setState(() => data = json.decode(jsonText));
     return 'success';
   }
-  List<String> images = [
-    "assets/Turkey.jpeg", //istanbul
-    "assets/England.jpeg", //london
-    "assets/USA.jpeg", //newyork
-    "assets/France.jpeg", //paris
-    "assets/Canada.jpeg", //toronto
-    "assets/Germany.jpeg", //germany
-    "assets/Italy.jpeg", //milan
-    "assets/Brazil.jpeg", //rio
-    "assets/Spain.jpeg", //madrid
-  ];
-  List<String> countries = [
-    "Turkey", //istanbul
-    "England", //london
-    "USA", //newyork
-    "France", //paris
-    "Canada", //toronto
-    "Germany", //germany
-    "Italy", //milan
-    "Brazil", //rio
-    "Spain", //madrid
-  ];
-  List<String> woeids = [
-    "23424969",
-    "44418",
-    "2459115",
-    "615702",
-    "4118",
-    "23424829",
-    "718345",
-    "455825",
-    "766273",
-  ];
+
+  Future<void> getToken() async {
+    final fcmToken = FirebaseMessaging.instance.getToken();
+    final String? token= await fcmToken;
+    print(token);
+  }
   @override
   void initState() {
+    getToken();
     loadJsonData();
+    data.sort((a, b) => a.someProperty.compareTo(b.someProperty));
     super.initState();
   }
 
@@ -78,7 +54,7 @@ class _MyHomeState extends State<MyHome> {
             flexibleSpace: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: !SettingsPage.isDark?[Colors.purple, Colors.black]:[Colors.white12, Colors.cyanAccent], stops: [0.4, 1.0],
+                  colors: !SettingsPage.isDark?[Colors.purple, Colors.black]:[Colors.white12, Colors.cyanAccent], stops: const [0.4, 1.0],
                 ),
               ),
             ),
@@ -103,13 +79,13 @@ class _MyHomeState extends State<MyHome> {
 
                 }),*/
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.settings,
                   color: Colors.white,
                 ),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => SettingsPage()));
+                      builder: (BuildContext context) => const SettingsPage()));
                 },
               ),
             ],
@@ -119,7 +95,7 @@ class _MyHomeState extends State<MyHome> {
               gradient: LinearGradient(
                 begin: Alignment.topRight,
                 end: Alignment.bottomRight,
-                colors: !SettingsPage.isDark?[Colors.grey.shade500, Colors.black]:[Colors.white60, Colors.cyanAccent], stops: [0.4, 1.0],
+                colors: !SettingsPage.isDark?[Colors.grey.shade500, Colors.black]:[Colors.white60, Colors.cyanAccent], stops: const [0.4, 1.0],
               ),
             ),
             child: Scaffold(
@@ -130,12 +106,11 @@ class _MyHomeState extends State<MyHome> {
                   child: Column(
                     children: [
                       Expanded(
-                        child: _counts.length==0?ListTile(title: Text("Please add a region",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),textAlign: TextAlign.center,),):GridView.builder(
+                        child: _counts.isEmpty?const ListTile(title: Text("Please add a region",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),textAlign: TextAlign.center,),):GridView.builder(
                           itemCount: _counts.length,
                           itemBuilder: (BuildContext context, int index) {
                             return TextButton(
                                 onPressed: () {
-                                  print(_counts[index].code+"  "+_counts[index].toString());
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -175,7 +150,7 @@ class _MyHomeState extends State<MyHome> {
                         ),
                       ),
                       Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           /*gradient: LinearGradient(
                             colors: !SettingsPage.isDark?[Colors.black, Colors.black]:[Colors.cyan, Colors.purple], stops: [0.4, 1.0],
                           ),*/
@@ -205,9 +180,33 @@ class _MyHomeState extends State<MyHome> {
   }
 }
 
-class Select extends StatelessWidget {
+class Select extends StatefulWidget {
   List data;
   Select({Key? key, required this.data}) : super(key: key);
+
+
+  @override
+  State<Select> createState() => _SelectState();
+}
+
+class _SelectState extends State<Select> {
+  List data2=[];
+
+  void filterList (String word){
+    List? result=[];
+    if(word.isEmpty){
+      result=data2;
+    }else{
+      result=data2.where((element) => element["name"].toLowerCase().contains(word.toLowerCase())).toList();
+    }
+    setState(() {
+      widget.data=result!;
+    });
+  }
+  @override
+  void initState() {
+    data2=widget.data;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -217,7 +216,7 @@ class Select extends StatelessWidget {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: !SettingsPage.isDark?[Colors.purple, Colors.black]:[Colors.white12, Colors.cyanAccent], stops: [0.4, 1.0],
+              colors: !SettingsPage.isDark?[Colors.purple, Colors.black]:[Colors.white12, Colors.cyanAccent], stops: const [0.4, 1.0],
             ),
           ),
         ),
@@ -225,38 +224,48 @@ class Select extends StatelessWidget {
       ),
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              onChanged: (value)=>filterList(value),
+              decoration: const InputDecoration(
+                labelText: ' Search',
+                suffixIcon: Icon(Icons.search)
+              ),
+            ),
+          ),
           Expanded(
             child: ListView.builder(
-              itemCount: data == null ? 0 : data.length,
+              itemCount: widget.data == null ? 0 : widget.data.length,
               itemBuilder: (BuildContext context, int index) {
                 return Column(
                   children: [
                     ListTile(
                       trailing:
-                      data[index]["countryCode"].toString().toLowerCase() !=
+                      widget.data[index]["countryCode"].toString().toLowerCase() !=
                           "null"
                           ? SizedBox(
 
                         width: 30,
                         height: 30,
                         child: SvgPicture.asset(
-                          
-                          'assets/countries/${data[index]["countryCode"].toString().toLowerCase()}.svg',
+
+                          'assets/countries/${widget.data[index]["countryCode"].toString().toLowerCase()}.svg',
                           allowDrawingOutsideViewBox: true,
                         ),
                       )
                           : null,
                       title: Text(
-                        data[index]["name"],
+                        widget.data[index]["name"],
                       ),
                       onTap: () {
                         bool check=false;
                         int ind=0;
                         Countries cr=Countries(
-                            countryName: data[index]["name"],
-                            code: data[index]["countryCode"],
-                            woeid: data[index]["woeid"]);
-                            _counts.forEach((element) {if(element.countryName==data[index]["name"]){
+                            countryName: widget.data[index]["name"],
+                            code: widget.data[index]["countryCode"],
+                            woeid: widget.data[index]["woeid"]);
+                            _counts.forEach((element) {if(element.countryName==widget.data[index]["name"]){
                               ind=_counts.indexOf(element);
                              check=true;
                         } });
@@ -269,7 +278,7 @@ class Select extends StatelessWidget {
                       }Navigator.pop(context);
                       },
                     ),
-                    Divider(thickness: 1,color: Colors.black,)
+                    const Divider(thickness: 1,color: Colors.black,)
                   ],
                 );
               },

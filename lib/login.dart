@@ -56,23 +56,20 @@ class _MyLoginState extends State<MyLogin> {
                   children: [
                     TextButton(onPressed: (){
                       setState(() {
-                        print("object: "+player.volume.toString());
                       if(ind==1){
                           ind=0;
-
                       }else{
                           ind=1;
                       }
-
                         player.setVolume(ind.toDouble());
                       });
-
-                    }, child: Container(margin: const EdgeInsets.only(left: 35, right: 35),child: Text(ind!=1?"🔇":"🔉",style: TextStyle(fontSize: 40),))),
+                    }, child: Container(margin: const EdgeInsets.only(left: 35, right: 35),child: Text(ind!=1?"🔇":"🔉",style: const TextStyle(fontSize: 40),))),
                     Container(
                       margin: const EdgeInsets.only(left: 35, right: 35),
                       child: Column(
                         children: [
                           TextField(
+                            keyboardType: TextInputType.emailAddress,
                             controller: myController,
                             style: const TextStyle(color: Colors.black),
                             decoration: InputDecoration(
@@ -188,7 +185,8 @@ class _MyLoginState extends State<MyLogin> {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20,
                                     ),
-                                  )),
+                                  ),
+                              ),
                             ],
                           )
                         ],

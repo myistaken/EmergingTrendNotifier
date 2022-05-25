@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Authentication {
   final _fireAuth = FirebaseAuth.instance;
@@ -8,11 +10,17 @@ class Authentication {
   // String? get mail => _fireAuth.currentUser!.email;
   Future<String> logIn(String email, String password) async {
     try {
-      await _fireAuth.signInWithEmailAndPassword(
+      UserCredential userCreds=await _fireAuth.signInWithEmailAndPassword(
           email: email, password: password);
+     FirebaseMessaging.instance.getToken().then((token) {
+       FirebaseFirestore.instance.collection('users').doc(userCreds.user!.uid).set({
+         'deviceToken': token
+       });
+     });
+
+
       return 'true';
     } catch (e) {
-      print(e.toString());
       return e.toString() ==
               "[firebase_auth/unknown] Given String is empty or null"
           ? "Given String is empty.\nFill The Blanks!"
@@ -34,8 +42,13 @@ class Authentication {
 
   Future<String> signUp(String email, String password) async {
     try {
-      await _fireAuth.createUserWithEmailAndPassword(
+      UserCredential userCreds= await _fireAuth.createUserWithEmailAndPassword(
           email: email, password: password);
+          FirebaseMessaging.instance.getToken().then((token) {
+          FirebaseFirestore.instance.collection('users').doc(userCreds.user!.uid).set({
+          'deviceToken': token
+        });
+      });
       return 'true';
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -55,7 +68,6 @@ class Authentication {
       await _fireAuth.sendPasswordResetEmail(email: email);
       return 'true';
     } catch (e) {
-      print(e.toString());
       return e.toString() ==
               "[firebase_auth/unknown] Given String is empty or null"
           ? "Given String is empty.\nFill The Blanks!"

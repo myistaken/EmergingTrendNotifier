@@ -160,7 +160,7 @@ class _ResultState extends State<Result> {
                             children: [
                               Text(
                                 (index + 1).toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
@@ -180,7 +180,7 @@ class _ResultState extends State<Result> {
                                 x.toString() != "null"
                                     ? x.toString()
                                     : "Under 10k",
-                                style: TextStyle(color: Colors.black),
+                                style: const TextStyle(color: Colors.black),
                               ),
                             ],
                           ),

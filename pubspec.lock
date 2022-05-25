@@ -161,14 +161,35 @@ packages:
       name: firebase_core_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.3.0"
+    version: "4.4.0"
   firebase_core_web:
     dependency: transitive
     description:
       name: firebase_core_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.3"
+    version: "1.6.4"
+  firebase_messaging:
+    dependency: "direct main"
+    description:
+      name: firebase_messaging
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "11.4.0"
+  firebase_messaging_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_messaging_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.5.0"
+  firebase_messaging_web:
+    dependency: transitive
+    description:
+      name: firebase_messaging_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.4.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -314,6 +335,13 @@ packages:
     dependency: transitive
     description:
       name: oauth1
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
+  overlay_support:
+    dependency: "direct main"
+    description:
+      name: overlay_support
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"

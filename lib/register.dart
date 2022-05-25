@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trenifyv1/dataBase/firestore_data.dart';
 
@@ -78,6 +79,7 @@ class _MyRegisterState extends State<MyRegister> {
                             height: 30,
                           ),
                           TextField(
+                            keyboardType: TextInputType.emailAddress,
                             controller: myControllerEmail,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
