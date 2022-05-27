@@ -21,11 +21,21 @@ class MyHome extends StatefulWidget {
 
 class _MyHomeState extends State<MyHome> {
   late List data=[];
+  late List data2=[];
+
 
   Future<String> loadJsonData() async {
     var jsonText = await rootBundle.loadString('assets/woeid.json');
     setState(() => data = json.decode(jsonText));
     return 'success';
+  }
+  Future<void> splitData() async {
+    for(int i =0; i<data.length;i++){
+      if(data[i]["placeType"]["code"]==12){
+        print(data[i]["name"]);
+        data2.add(data[i]);
+      }
+    }
   }
 
   Future<void> getToken() async {
@@ -36,8 +46,9 @@ class _MyHomeState extends State<MyHome> {
   @override
   void initState() {
     getToken();
-    loadJsonData();
+    loadJsonData().then((value) => splitData());
     data.sort((a, b) => a.someProperty.compareTo(b.someProperty));
+    data2.sort((a, b) => a.someProperty.compareTo(b.someProperty));
     super.initState();
   }
 
@@ -135,6 +146,7 @@ class _MyHomeState extends State<MyHome> {
                                     ),
                                     Text(
                                       _counts[index].countryName,
+                                     textAlign: TextAlign.center,
                                      style:  TextStyle(color: !SettingsPage.isDark?Colors.white:Colors.black),
                                     ),
                                   ],
@@ -164,7 +176,7 @@ class _MyHomeState extends State<MyHome> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => Select(
-                                      data: data,
+                                      data: data2,
                                     ))),
                           },
                           child: const Text('Add/Remove a Region'),
@@ -249,7 +261,6 @@ class _SelectState extends State<Select> {
                         width: 30,
                         height: 30,
                         child: SvgPicture.asset(
-
                           'assets/countries/${widget.data[index]["countryCode"].toString().toLowerCase()}.svg',
                           allowDrawingOutsideViewBox: true,
                         ),

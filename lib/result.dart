@@ -1,7 +1,15 @@
+import 'dart:convert';
+
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:trenifyv1/provider/trends_provider.dart';
 import 'package:trenifyv1/search_page.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:trenifyv1/settings.dart';
+
 
 class Result extends StatefulWidget {
   String woeid, country, countryCode;
@@ -18,6 +26,31 @@ class Result extends StatefulWidget {
 }
 
 class _ResultState extends State<Result> {
+  List data=[];
+  List woeids=[];
+  List countries=[];
+  List countryCodes=[];
+  Future<String> loadJsonData() async {
+    var jsonText = await rootBundle.loadString('assets/woeid.json');
+    setState(() => data = json.decode(jsonText));
+    return 'success';
+  }
+  Future<String> dataToChildren() async {
+
+    for(int i=0;i<data.length;i++){
+      if(data[i]["countryCode"].toString().compareTo(widget.countryCode)==0){
+        print(data[i]["name"]);
+        setState(() {
+          woeids.add(data[i]["woeid"].toString());
+          countries.add(data[i]["name"]);
+          countryCodes.add(data[i]["countryCode"]);
+        });
+
+      }
+    }
+    return 'success';
+  }
+
   static String consumerApiKey = "3CSWEz90VoTSuHHQjc7DQgvwQ";
   static String consumerApiSecret =
       "gTwuNxcnThwDchRZ6cq3nS9VX5Hja8iAWkF6OMnXQaSWza6QdE";
@@ -38,13 +71,19 @@ class _ResultState extends State<Result> {
           token: accessToken,
           secret: accessTokenSecret));
 
-  Future<void> searchTweets() async {
+  Future<void> searchTweets(String woeid) async {
+    setState(() {
+      trends=[];
+      volumes=[];
+    });
+
+
     setState(() {
       isLoading = true;
     });
     try {
       final homeTimeline =
-          await twitterApi.trendsService.place(id: int.parse(widget.woeid));
+          await twitterApi.trendsService.place(id: int.parse(woeid));
       for (var tweet in homeTimeline) {
         for (int i = 0; i < tweet.trends!.length; i++) {
           setState(() {
@@ -66,26 +105,27 @@ class _ResultState extends State<Result> {
   }
 
   void fake() async {
-    await searchTweets();
-    trends.length;
+    await searchTweets(widget.woeid);
   }
 
   @override
   void initState() {
+    loadJsonData().then((value) =>  dataToChildren());
     fake();
     super.initState();
   }
 
   int? x = 0;
-
+  //String? selectedValue;
   @override
   Widget build(BuildContext context) {
     return isLoading
         ? Center(
             child: Scaffold(
               appBar: AppBar(
-                backgroundColor: Colors.black,
-                title: Text(widget.country),
+                backgroundColor: Colors.grey,
+                title:
+                Text(widget.country),
                 actions: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -113,8 +153,22 @@ class _ResultState extends State<Result> {
               ),
               child: Scaffold(
                 appBar: AppBar(
-                  backgroundColor: Colors.black,
-                  title: Text(widget.country),
+                  backgroundColor: Colors.grey,
+                  title:/*
+                  DropdownButtonHideUnderline(child: DropdownButton2(
+                    hint: Text('Select Region',style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),),
+                    items: countries.map((e) => DropdownMenuItem(value:e,child: Text(e,style: TextStyle(color: Colors.black),))).toList(),
+                    value: selectedValue,
+                    onChanged: (value)=>{
+                      setState((){
+                        selectedValue=value as String;
+                      })
+                    },
+                  ),)*/
+                  Text(widget.country),
                   actions: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -126,7 +180,7 @@ class _ResultState extends State<Result> {
                     ),
                   ],
                 ),
-                backgroundColor: Colors.transparent,
+                backgroundColor: Colors.grey,
                 body: ListView.builder(
                   itemBuilder: (BuildContext context, int index) {
                     x = volumes[index];

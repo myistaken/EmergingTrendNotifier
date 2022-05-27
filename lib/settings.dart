@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trenifyv1/forgot_password.dart';
@@ -20,6 +21,10 @@ ThemeData darkTheme =
     ThemeData(brightness: Brightness.dark, primaryColor: Colors.black);
 
 bool _volumeOn = true;
+
+void logout() async {
+  await FirebaseAuth.instance.signOut();
+}
 
 class _SettingsPageState extends State<SettingsPage> {
   @override
@@ -189,6 +194,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: const Text("YES"),
                   onPressed: () {
                     if (title == "Log Out") {
+                      setState(() {
+                        logout();
+                      });
+
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(builder: (context) => MyLogin()),
