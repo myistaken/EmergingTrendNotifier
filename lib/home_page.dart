@@ -40,20 +40,18 @@ class _MyHomeState extends State<MyHome> {
     }
   }
 
-  Future<void> getToken() async {
-    final fcmToken = FirebaseMessaging.instance.getToken();
-    final String? token= await fcmToken;
-    print(token);
-  }
+
   @override
   void initState() {
     Provider.of<CountryProvider>(context, listen: false).initData().then((e)=>{
       setState(() {
-
       })
     });
-    getToken();
-
+    FirebaseMessaging.instance.getToken().then((token) {
+      FirebaseFirestore.instance.collection('lists').doc(Authentication().userUID).update({
+        'deviceToken': token
+      });
+    });
     loadJsonData().then((value) => {
       splitData(),
     });
@@ -119,7 +117,7 @@ bool editCheck=false;
                 ),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => const SettingsPage()));
+                      builder: (BuildContext context) => SettingsPage(data: data,)));
                 },
               ),
             ],

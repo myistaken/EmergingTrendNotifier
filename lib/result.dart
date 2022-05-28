@@ -116,6 +116,7 @@ class _ResultState extends State<Result> {
     return isLoading
         ? Center(
             child: Scaffold(
+              backgroundColor: Colors.grey,
               body: const Center(child: CircularProgressIndicator()),
             ),
           )

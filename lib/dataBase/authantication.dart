@@ -12,11 +12,10 @@ class Authentication {
     try {
       UserCredential userCreds=await _fireAuth.signInWithEmailAndPassword(
           email: email, password: password);
-     FirebaseMessaging.instance.getToken().then((token) {
-       FirebaseFirestore.instance.collection('users').doc(userCreds.user!.uid).set({
-         'deviceToken': token
+
+       FirebaseFirestore.instance.collection('lists').doc(userUID).update({
+         'status': 1
        });
-     });
 
 
       return 'true';
@@ -44,10 +43,10 @@ class Authentication {
     try {
       UserCredential userCreds= await _fireAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-          FirebaseMessaging.instance.getToken().then((token) {
-          FirebaseFirestore.instance.collection('users').doc(userCreds.user!.uid).set({
-          'deviceToken': token
-        });
+      FirebaseFirestore.instance.collection('lists').doc(userUID).set({
+        'favorites':"",
+        'list': [],
+        'status': 1
       });
       return 'true';
     } on FirebaseAuthException catch (e) {

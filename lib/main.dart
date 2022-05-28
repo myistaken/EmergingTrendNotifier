@@ -1,11 +1,14 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trenifyv1/home_page.dart';
 import 'package:trenifyv1/provider/country_provider.dart';
+import 'dataBase/authantication.dart';
 import 'login.dart';
 import 'register.dart';
 
@@ -23,13 +26,25 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late StreamSubscription<User?> user;
+
+  Future<String?> getToken() async {
+    final fcmToken = FirebaseMessaging.instance.getToken();
+    final String? token= await fcmToken;
+    return token;
+  }
   void initState() {
+
     super.initState();
     user = FirebaseAuth.instance.authStateChanges().listen((user) {
       if (user == null) {
         print('User is currently signed out!');
       } else {
-        print('User is signed in!');
+        FirebaseFirestore.instance.collection('lists').doc(Authentication().userUID).update({
+          'status': 1
+        });
+        getToken().then((value) =>  FirebaseFirestore.instance.collection('lists').doc(Authentication().userUID).update({
+          'deviceToken': value
+        }));
       }
     });
   }

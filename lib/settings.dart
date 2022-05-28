@@ -1,13 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:trenifyv1/forgot_password.dart';
 import 'package:trenifyv1/login.dart';
+import 'package:trenifyv1/provider/country_provider.dart';
 
+import 'dataBase/authantication.dart';
 import 'home_page.dart';
+import 'models/country.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  List data;
+  SettingsPage({Key? key,required this.data}) : super(key: key);
   static bool isDark = true;
 
   @override
@@ -23,24 +30,34 @@ ThemeData darkTheme =
 bool _volumeOn = true;
 
 void logout() async {
+  FirebaseFirestore.instance.collection('lists').doc(Authentication().userUID).update({
+    'status': 0
+  });
   await FirebaseAuth.instance.signOut();
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         theme: SettingsPage.isDark ? lightTheme : darkTheme,
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
             //backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             elevation: 1,
             leading: IconButton(
               onPressed: () {
+
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => const MyHome()),
-                    (route) => false);
+                    (route) => false).then((value) => {
+                setState(() {
+
+                })
+                });
               },
               icon: const Icon(
                 Icons.arrow_back,
@@ -84,6 +101,68 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 buildAccountOptionRow(context, "Change password"),
                 buildAccountOptionRow(context, "Log Out"),
+
+                const SizedBox(
+                  height: 40,
+                ),
+                Row(
+                  children: const [
+                    Icon(
+                      Icons.notifications_active,
+                      color: Colors.blue,
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      "Notifications",
+                      style:
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                const Divider(
+                  height: 15,
+                  thickness: 2,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Notification Country:",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      TextButton(
+                          onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Select2(data: widget.data)));
+                          },
+                          child: Provider.of<CountryProvider>(context).favorite.code.toString().toLowerCase()=="" ||Provider.of<CountryProvider>(context).favorite.code.toString().toLowerCase()== null?
+
+                          Icon(Icons.explore_outlined,
+                            color: Colors.grey,):Row(
+                              children: [
+                                SvgPicture.asset(
+                   'assets/countries/${Provider.of<CountryProvider>(context).favorite.code.toLowerCase()}.svg',
+            allowDrawingOutsideViewBox: true,
+            width: 40,
+            height: 40,
+          ),
+                              IconButton(onPressed: (){Provider.of<CountryProvider>(context,listen: false).removeFavorite(Provider.of<CountryProvider>(context,listen: false).favorite);}, icon: Icon(Icons.delete,color: Colors.red,))],
+                            ),
+
+                      ),
+                    ],
+                  ),
+                ),
                 const SizedBox(
                   height: 40,
                 ),
@@ -248,6 +327,106 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+
+class Select2 extends StatefulWidget {
+  List data;
+  Select2({Key? key, required this.data}) : super(key: key);
+
+
+  @override
+  State<Select2> createState() => _Select2State();
+}
+
+class _Select2State extends State<Select2> {
+  List data2=[];
+
+  void filterList (String word){
+    List? result=[];
+    if(word.isEmpty){
+      result=data2;
+    }else{
+      result=data2.where((element) => element["name"].toLowerCase().contains(word.toLowerCase())).toList();
+    }
+    setState(() {
+      widget.data=result!;
+    });
+  }
+  @override
+  void initState() {
+    data2=widget.data;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: !SettingsPage.isDark?[Colors.purple, Colors.black]:[Colors.white12, Colors.cyanAccent], stops: const [0.4, 1.0],
+            ),
+          ),
+        ),
+        title: const Text("Select Region"),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              onChanged: (value)=>filterList(value),
+              decoration: const InputDecoration(
+                  labelText: ' Search',
+                  suffixIcon: Icon(Icons.search)
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: widget.data == null ? 0 : widget.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Column(
+                  children: [
+                    ListTile(
+                      trailing:
+                      widget.data[index]["name"].toString().toLowerCase() !=
+                          "null"
+                          ? SizedBox(
+
+                        width: 30,
+                        height: 30,
+                        child: SvgPicture.asset(
+                          'assets/countries/${widget.data[index]["countryCode"].toString().toLowerCase()}.svg',
+                          allowDrawingOutsideViewBox: true,
+                        ),
+                      )
+                          : null,
+                      title: Text(
+                        widget.data[index]["name"],
+                      ),
+                      onTap: () {
+                        bool check=false;
+                        int ind=0;
+                        Countries cr=Countries(
+                            countryName: widget.data[index]["name"],
+                            code: widget.data[index]["countryCode"],
+                            woeid: widget.data[index]["woeid"]);
+                           Provider.of<CountryProvider>(context,listen: false).addToFavorite(cr);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    const Divider(thickness: 1,color: Colors.black,)
+                  ],
+                );
+              },
+            ),
+          )
+        ],
       ),
     );
   }
