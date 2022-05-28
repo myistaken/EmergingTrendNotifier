@@ -9,13 +9,17 @@ class CountryProvider with ChangeNotifier {
   final List<Countries> _counts = [];
   List<Countries> get counts => _counts;
   List ls=[];
-  void initData(){
-    FirebaseFirestore.instance.collection("lists").doc(Authentication().userUID).get().then((value){
+  Future<void> initData() async{
+    _counts.clear();
+    ls.clear();
+     await FirebaseFirestore.instance.collection("lists").doc(Authentication().userUID).get().then((value){
       value.data()?.forEach((key, value) {value.forEach(
               (data){
-                ls.add(data.toString());
-                List dataList=data.toString().split("*");
-                _counts.add(Countries(countryName: dataList[1], woeid: int.parse(dataList[2]), code: dataList[0]));
+                if(!ls.contains(data.toString())){
+                  ls.add(data.toString());
+                  List dataList=data.toString().split("*");
+                  _counts.add(Countries(countryName: dataList[1], woeid: int.parse(dataList[2]), code: dataList[0]));
+                }
           }
       );});
     });
@@ -24,7 +28,9 @@ class CountryProvider with ChangeNotifier {
     _counts.add(country);
 
     String s=country.code+"*"+country.countryName+"*"+country.woeid.toString();
-    ls.add(s);
+    if(!ls.contains(s)){
+      ls.add(s);
+    }
     FirebaseFirestore.instance.collection('lists').doc(Authentication().userUID).set({
       'list':ls
     });

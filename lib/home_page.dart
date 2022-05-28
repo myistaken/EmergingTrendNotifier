@@ -47,7 +47,11 @@ class _MyHomeState extends State<MyHome> {
   }
   @override
   void initState() {
-    Provider.of<CountryProvider>(context, listen: false).initData();
+    Provider.of<CountryProvider>(context, listen: false).initData().then((e)=>{
+      setState(() {
+
+      })
+    });
     getToken();
 
     loadJsonData().then((value) => {
@@ -201,7 +205,7 @@ bool editCheck=false;
                                       data: data2,
                                     ))),
                           },
-                          child: const Text('Add/Remove a Region'),
+                          child: const Text('Add a Region'),
                         ),
                       ),
                     ],
@@ -303,7 +307,7 @@ class _SelectState extends State<Select> {
                              check=true;
                         } });
                         if(check){
-                          context.read<CountryProvider>().removeFromList(ind);
+                          ;
                         }
                         else{
                           context.read<CountryProvider>().addToList(cr);
