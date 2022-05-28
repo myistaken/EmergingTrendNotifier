@@ -23,7 +23,7 @@ class CountryProvider with ChangeNotifier {
   void addToList(Countries country) {
     _counts.add(country);
 
-    String s=country.code+""+country.countryName+""+country.woeid.toString();
+    String s=country.code+"*"+country.countryName+"*"+country.woeid.toString();
     ls.add(s);
     FirebaseFirestore.instance.collection('lists').doc(Authentication().userUID).set({
       'list':ls
