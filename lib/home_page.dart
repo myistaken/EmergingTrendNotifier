@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:trenifyv1/dataBase/authantication.dart';
 import 'package:trenifyv1/provider/country_provider.dart';
 import 'package:trenifyv1/settings.dart';
 
@@ -45,13 +47,18 @@ class _MyHomeState extends State<MyHome> {
   }
   @override
   void initState() {
+    Provider.of<CountryProvider>(context, listen: false).initData();
     getToken();
-    loadJsonData().then((value) => splitData());
+
+    loadJsonData().then((value) => {
+      splitData(),
+    });
     data.sort((a, b) => a.someProperty.compareTo(b.someProperty));
     data2.sort((a, b) => a.someProperty.compareTo(b.someProperty));
     super.initState();
   }
 
+  
   @override
   Widget build(BuildContext context) {
     var _counts = context.watch<CountryProvider>().counts;
