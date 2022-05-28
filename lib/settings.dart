@@ -84,7 +84,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 buildAccountOptionRow(context, "Change password"),
                 buildAccountOptionRow(context, "Log Out"),
-                //   buildAccountOptionRow(context, "Language"),
                 const SizedBox(
                   height: 40,
                 ),

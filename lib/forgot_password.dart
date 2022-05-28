@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trenifyv1/login.dart';
-
 import 'dataBase/authantication.dart';
 
 class ForgotPassword extends StatelessWidget {

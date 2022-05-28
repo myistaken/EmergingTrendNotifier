@@ -1,14 +1,11 @@
 import 'dart:convert';
 
 import 'package:dart_twitter_api/twitter_api.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
-import 'package:trenifyv1/provider/trends_provider.dart';
 import 'package:trenifyv1/search_page.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:trenifyv1/settings.dart';
 
 
 class Result extends StatefulWidget {
@@ -45,7 +42,6 @@ class _ResultState extends State<Result> {
           countries.add(data[i]["name"]);
           countryCodes.add(data[i]["countryCode"]);
         });
-
       }
     }
     return 'success';
@@ -72,12 +68,8 @@ class _ResultState extends State<Result> {
           secret: accessTokenSecret));
 
   Future<void> searchTweets(String woeid) async {
-    setState(() {
-      trends=[];
-      volumes=[];
-    });
-
-
+      trends.clear();
+      volumes.clear();
     setState(() {
       isLoading = true;
     });
@@ -112,37 +104,18 @@ class _ResultState extends State<Result> {
   void initState() {
     loadJsonData().then((value) =>  dataToChildren());
     fake();
+    countryName=widget.country;
     super.initState();
   }
 
   int? x = 0;
+  String? countryName;
   //String? selectedValue;
   @override
   Widget build(BuildContext context) {
     return isLoading
         ? Center(
             child: Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.grey,
-                title:
-                Text(widget.country),
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Hero(
-                      tag: 'logo',
-                      child: SizedBox(
-                        width: 30,
-                        height: 30,
-                        child: SvgPicture.asset(
-                          'assets/countries/${widget.countryCode.toString().toLowerCase()}.svg',
-                          allowDrawingOutsideViewBox: true,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
               body: const Center(child: CircularProgressIndicator()),
             ),
           )
@@ -154,21 +127,29 @@ class _ResultState extends State<Result> {
               child: Scaffold(
                 appBar: AppBar(
                   backgroundColor: Colors.grey,
-                  title:/*
-                  DropdownButtonHideUnderline(child: DropdownButton2(
-                    hint: Text('Select Region',style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),),
-                    items: countries.map((e) => DropdownMenuItem(value:e,child: Text(e,style: TextStyle(color: Colors.black),))).toList(),
-                    value: selectedValue,
-                    onChanged: (value)=>{
-                      setState((){
-                        selectedValue=value as String;
-                      })
-                    },
-                  ),)*/
-                  Text(widget.country),
+                  centerTitle: true,
+                  title:
+                  DropdownButton2(
+                    buttonWidth: 200,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400, color: Colors.black),
+                    selectedItemHighlightColor: Colors.blue.shade300,
+                    value: countryName,
+                    items: countries
+                        .map<DropdownMenuItem<String>>(
+                          (e) => DropdownMenuItem(
+                        value: e,
+                        child: Text(e),
+                      ),
+                    )
+                        .toList(),
+                    onChanged: (String? value) => setState(
+                          () {
+                        if (value != null) countryName = value;
+                        int index=countries.indexOf(value);
+                        searchTweets(woeids[index]);
+                      },
+                    ),
+                  ),
                   actions: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
