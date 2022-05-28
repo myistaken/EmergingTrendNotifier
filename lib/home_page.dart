@@ -57,7 +57,7 @@ class _MyHomeState extends State<MyHome> {
     data2.sort((a, b) => a.someProperty.compareTo(b.someProperty));
     super.initState();
   }
-
+bool editCheck=false;
   
   @override
   Widget build(BuildContext context) {
@@ -96,6 +96,18 @@ class _MyHomeState extends State<MyHome> {
                 onPressed: () {
 
                 }),*/
+              IconButton(
+                icon: Icon(
+                  Icons.edit,
+                  color: !editCheck?Colors.white:Colors.red,
+                ),
+                onPressed: () {
+                  setState(() {
+                    editCheck=!editCheck;
+                  });
+
+                },
+              ),
               IconButton(
                 icon: const Icon(
                   Icons.settings,
@@ -144,7 +156,10 @@ class _MyHomeState extends State<MyHome> {
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
-                                      child: SvgPicture.asset(
+                                      child: editCheck?IconButton(icon: Icon(Icons.remove_circle_outline_rounded,size: 35,color: Colors.red,), onPressed: () {
+                                        context.read<CountryProvider>().removeFromList(index);
+                                      },):
+                                      SvgPicture.asset(
                                           'assets/countries/${_counts[index].code.toLowerCase()}.svg',
                                           allowDrawingOutsideViewBox: true,
                                         width: 40,
