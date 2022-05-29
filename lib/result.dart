@@ -132,7 +132,7 @@ class _ResultState extends State<Result> {
                   backgroundColor: Colors.grey,
                   centerTitle: true,
                   title: DropdownButton2(
-                    buttonWidth: 200,
+                    buttonWidth: 250,
                     style: SettingsPage.isDark
                         ? const TextStyle(
                             fontSize: 20,
