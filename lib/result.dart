@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -114,10 +113,10 @@ class _ResultState extends State<Result> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? Center(
+        ? const Center(
             child: Scaffold(
               backgroundColor: Colors.grey,
-              body: const Center(child: CircularProgressIndicator()),
+              body: Center(child: CircularProgressIndicator()),
             ),
           )
         : SafeArea(
@@ -132,7 +131,7 @@ class _ResultState extends State<Result> {
                   title:
                   DropdownButton2(
                     buttonWidth: 200,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400, color: Colors.black),
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400, color: Colors.black),
                     selectedItemHighlightColor: Colors.blue.shade300,
                     value: countryName,
                     items: countries

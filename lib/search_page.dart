@@ -44,7 +44,7 @@ class _SearchPageState extends State<SearchPage> {
     });
     final homeTimeline = await twitterApi.tweetSearchService
         .searchTweets(q: query, count: 30, tweetMode: "extended");
-    int p = 0;
+    // int p = 0;
     for (var tweet in homeTimeline.statuses!) {
       setState(() {
         //MyApp.tweetList.add(tweet.fullText!);
@@ -56,7 +56,7 @@ class _SearchPageState extends State<SearchPage> {
         //.user.location  tweet.,
       });
       //print(SearchPage.twitterList[p].fullText);
-      p++;
+      // p++;
     }
     // print(SearchPage.twitterList[3].fullText);
     setState(() {
@@ -84,40 +84,33 @@ class _SearchPageState extends State<SearchPage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('${widget.tweetItself}',textAlign: TextAlign.start),
+          title: Text(widget.tweetItself, textAlign: TextAlign.start),
           actions: [
-            Center(
-                child: Text(
-              'Count of \nTweets',
-              textAlign: TextAlign.center,
-            )),
+            // Center(
+            //   child: Icon(
+            //     Icons.format_list_numbered_outlined
+            //   )
+            // ),
+            // Align(
+            //     alignment: Alignment.centerRight,
+            //     child: Text('Recent',textAlign: TextAlign.center,)),
             DropdownButtonHideUnderline(
               child: DropdownButton2(
                 isExpanded: true,
-                hint: Row(
-                  children: const [
-                    Text(
-                      '#',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.yellow,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
                 items: items
                     .map((item) => DropdownMenuItem<int>(
                           value: item,
                           child: Text(
-                            '${item}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                            '$item',
+                            style: SettingsPage.isDark
+                                ? const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white)
+                                : const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ))
@@ -126,35 +119,47 @@ class _SearchPageState extends State<SearchPage> {
                 onChanged: (value) {
                   setState(() {
                     selectedValue = value as int;
-
                   });
                 },
                 icon: const Icon(
-                  Icons.arrow_forward_ios_outlined,
+                  //   Icons.arrow_forward_ios_outlined,
+
+                  Icons.format_list_numbered_outlined, color: Colors.white,
                 ),
-                iconSize: 14,
-                iconEnabledColor: Colors.yellow,
-                iconDisabledColor: Colors.grey,
-                buttonHeight: 50,
+                iconSize: 20,
+                // iconEnabledColor: Colors.yellow,
+                // iconDisabledColor: Colors.grey,
                 buttonWidth: 70,
                 buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                buttonDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                    color: Colors.black26,
-                  ),
-                  color: Colors.blueAccent,
-                ),
+                // buttonDecoration: BoxDecoration(
+                //   borderRadius: BorderRadius.circular(14),
+                //   // border: Border.all(
+                //   // color: Colors.black26,
+                //   // ),
+                //   color: Color(0xFFFFFF).withOpacity(0.13),
+                // ),
                 buttonElevation: 2,
                 itemHeight: 40,
                 itemPadding: const EdgeInsets.only(left: 14, right: 14),
                 dropdownMaxHeight: 200,
                 dropdownWidth: 200,
                 dropdownPadding: null,
-                dropdownDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  color: Colors.cyan,
-                ),
+                dropdownDecoration: SettingsPage.isDark
+                    ? BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [ Colors.lightBlueAccent,Colors.white,],
+                        ),
+                        borderRadius: BorderRadius.circular(14),
+                        // color: Colors.blue.shade100
+                        //color: Colors.grey.shade400.withOpacity(0.5)
+                        // color: SettingsPage.isDark ? Color(0xFFFFFF).withOpacity(0.3): Color(0xFFFFFF).withOpacity(0.30) ,
+                      )
+                    : BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        // color: Colors.blue.shade100
+                        //color: Colors.grey.shade400.withOpacity(0.5)
+                        // color: SettingsPage.isDark ? Color(0xFFFFFF).withOpacity(0.3): Color(0xFFFFFF).withOpacity(0.30) ,
+                      ),
                 dropdownElevation: 8,
                 scrollbarRadius: const Radius.circular(40),
                 scrollbarThickness: 6,
@@ -164,85 +169,99 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ],
         ),
-        body: isLoading ? Center(child: CircularProgressIndicator()) :ListView(
-          children: List.generate(
-            selectedValue,
-            (index) => ListTile(
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    SearchPage.twitterList[index].user?.profileImageUrlHttps),
-              ),
-              title: Text(
-                '${SearchPage.twitterList[index].user?.name}',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  (SearchPage.twitterList[index].user.location)
-                          .toString()
-                          .isNotEmpty
-                      ? Row(
+        body: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : ListView(
+                children: List.generate(
+                  selectedValue,
+                  (index) => ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(SearchPage
+                          .twitterList[index].user?.profileImageUrlHttps),
+                    ),
+                    title: Text(
+                      '${SearchPage.twitterList[index].user?.name}',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        (SearchPage.twitterList[index].user.location)
+                                .toString()
+                                .isNotEmpty
+                            ? Row(
+                                children: [
+                                  const Icon(Icons.place_outlined, size: 20),
+                                  Text(
+                                    ' ${SearchPage.twitterList[index].user.location}',
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ],
+                              )
+                            : const Text(''),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          SearchPage.twitterList[index].fullText,
+                          overflow: TextOverflow.clip,
+                          style: SettingsPage.isDark
+                              ? const TextStyle(color: Colors.black)
+                              : const TextStyle(color: Colors.white),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Icon(Icons.place_outlined, size: 20),
-                            Text(
-                              ' ${SearchPage.twitterList[index].user.location}',
-                              textAlign: TextAlign.start,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const Icon(
+                                  Icons.search_off,
+                                  color: Colors.cyan,
+                                ),
+                                Text(
+                                  widget.tweetItself,
+                                  style: SettingsPage.isDark
+                                      ? const TextStyle(color: Colors.black)
+                                      : const TextStyle(color: Colors.white),
+                                ),
+                              ],
                             ),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.repeat,
+                                  color: Colors.cyan,
+                                ),
+                                Text(
+                                  '${SearchPage.twitterList[index].retweetCount}',
+                                  style: SettingsPage.isDark
+                                      ? const TextStyle(color: Colors.black)
+                                      : const TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                            // Row(
+                            //   children: [
+                            //     Icon(Icons.favorite_border),
+                            //     Text(
+                            //         '${SearchPage.twitterList[index].favoriteCount}'),
+                            //   ],
+                            // ),
                           ],
-                        )
-                      : Text(''),
-                  SizedBox(
-                    height: 10,
+                        ),
+                        const Divider(thickness: 3),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
                   ),
-                  Text(
-                    SearchPage.twitterList[index].fullText,
-                    overflow: TextOverflow.clip,
-                    style: SettingsPage.isDark ? TextStyle(color: Colors.black) :TextStyle(color: Colors.white) ,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(Icons.search_off,color: Colors.cyan,),
-                          Text(
-                            '${widget.tweetItself}',
-                            style:  SettingsPage.isDark ? TextStyle(color: Colors.black) :TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Icon(Icons.repeat,color: Colors.cyan,),
-                          Text(
-                            '${SearchPage.twitterList[index].retweetCount}',
-                            style:  SettingsPage.isDark ? TextStyle(color: Colors.black) :TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
-                      // Row(
-                      //   children: [
-                      //     Icon(Icons.favorite_border),
-                      //     Text(
-                      //         '${SearchPage.twitterList[index].favoriteCount}'),
-                      //   ],
-                      // ),
-                    ],
-                  ),
-                  Divider(thickness: 3),
-                  SizedBox(
-                    height: 10,
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
       ),
     );
   }

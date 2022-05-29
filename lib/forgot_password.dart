@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trenifyv1/login.dart';
 import 'dataBase/authantication.dart';
@@ -33,7 +32,7 @@ class ForgotPassword extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => const MyLogin()),
                       (route) => false);
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_back_ios,
                   color: Colors.white,
                   size: 30,
@@ -42,19 +41,19 @@ class ForgotPassword extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 200,),
+                  const SizedBox(height: 200,),
                   Container(
                     margin: const EdgeInsets.only(left: 35, right: 35),
                     child: Column(
                       children: [
-                        Text(
+                        const Text(
                           'Enter Your Mail',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                               fontSize: 24),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30,
                         ),
                         TextField(
@@ -110,7 +109,7 @@ class ForgotPassword extends StatelessWidget {
                                 );
                               }
                             },
-                            child: Text('Send Password Request'))
+                            child: const Text('Send Password Request'))
                       ],
                     ),
                   )
