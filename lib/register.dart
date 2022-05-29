@@ -156,6 +156,7 @@ class _MyRegisterState extends State<MyRegister> {
                                             email: myControllerEmail.text,
                                             password: myControllerPassword.text).then((value) =>  FirebaseFirestore.instance.collection('lists').doc(Authentication().userUID).set({
                                           'favorite':"",
+                                          'interval':1,
                                           'list': [],
                                           'status': 1
                                         }));

@@ -37,6 +37,23 @@ void logout() async {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  Future<void> syncInterval()async{
+    await FirebaseFirestore.instance.collection('lists').doc(Authentication().userUID).get().then((value){
+      setState(() {
+        interval=value.data()?["interval"];
+      });
+  });
+  }
+
+  int interval=1;
+  int check=1;
+  @override
+  void initState() {
+    syncInterval();
+    // TODO: implement initState
+    super.initState();
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -156,13 +173,40 @@ class _SettingsPageState extends State<SettingsPage> {
             width: 40,
             height: 40,
           ),
-                              IconButton(onPressed: (){Provider.of<CountryProvider>(context,listen: false).removeFavorite(Provider.of<CountryProvider>(context,listen: false).favorite);}, icon: Icon(Icons.delete,color: Colors.red,))],
+                              IconButton(onPressed: (){setState(() {
+
+                                check=0;
+                              });Provider.of<CountryProvider>(context,listen: false).removeFavorite(Provider.of<CountryProvider>(context,listen: false).favorite);}
+                                  , icon: Icon(Icons.delete,color: Colors.red,))],
                             ),
 
                       ),
                     ],
                   ),
                 ),
+
+            Provider.of<CountryProvider>(context).favorite.code.toString().toLowerCase()!="" &&Provider.of<CountryProvider>(context).favorite.code.toString().toLowerCase()!= null?
+            Slider(
+                  divisions: 6,
+                  value: interval.toDouble(),
+                  min: 0.6,
+                  max: 24,
+                  activeColor: Colors.red,
+                  inactiveColor: Colors.grey,
+                  label: "$interval",
+                  onChangeEnd: (double newValue) {
+                    setState(() {
+                      FirebaseFirestore.instance.collection('lists').doc(Authentication().userUID).update({
+                        'interval':interval,
+                      });
+                    });
+                  },
+                  onChanged: (double newValue) {
+                    setState(() {
+                      interval = newValue.round();
+                    });
+                  },
+                ):Text(""),Text(Provider.of<CountryProvider>(context).favorite.code.toString().toLowerCase()!="" &&Provider.of<CountryProvider>(context).favorite.code.toString().toLowerCase()!= null?"Notification Interval (Every $interval hour)":"",textAlign: TextAlign.center,),
                 const SizedBox(
                   height: 40,
                 ),

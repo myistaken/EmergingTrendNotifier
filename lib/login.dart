@@ -121,6 +121,7 @@ class _MyLoginState extends State<MyLogin> {
 
                                       if (snapShot == null || !snapShot.exists) {
                                         FirebaseFirestore.instance.collection('lists').doc(Authentication().userUID).set({
+                                          'interval':1,
                                           'favorite':"",
                                           'list': [],
                                           'status': 1
