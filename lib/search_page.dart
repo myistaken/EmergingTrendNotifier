@@ -222,8 +222,9 @@ class _SearchPageState extends State<SearchPage> {
                                   Icons.search_off,
                                   color: Colors.cyan,
                                 ),
-                                Text(
-                                  widget.tweetItself,
+                                Text(widget.tweetItself.length > 27 ? widget.tweetItself.substring(0, 10)+'...' : widget.tweetItself,
+                                  //
+                                  // widget.tweetItself,
                                   style: SettingsPage.isDark
                                       ? const TextStyle(color: Colors.black)
                                       : const TextStyle(color: Colors.white),

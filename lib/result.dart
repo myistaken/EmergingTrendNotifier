@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:trenifyv1/search_page.dart';
-
+import 'package:trenifyv1/settings.dart';
 
 class Result extends StatefulWidget {
   String woeid, country, countryCode;
@@ -22,19 +22,21 @@ class Result extends StatefulWidget {
 }
 
 class _ResultState extends State<Result> {
-  List data=[];
-  List woeids=[];
-  List countries=[];
-  List countryCodes=[];
+  List data = [];
+  List woeids = [];
+  List countries = [];
+  List countryCodes = [];
+
   Future<String> loadJsonData() async {
     var jsonText = await rootBundle.loadString('assets/woeid.json');
     setState(() => data = json.decode(jsonText));
     return 'success';
   }
-  Future<String> dataToChildren() async {
 
-    for(int i=0;i<data.length;i++){
-      if(data[i]["countryCode"].toString().compareTo(widget.countryCode)==0){
+  Future<String> dataToChildren() async {
+    for (int i = 0; i < data.length; i++) {
+      if (data[i]["countryCode"].toString().compareTo(widget.countryCode) ==
+          0) {
         print(data[i]["name"]);
         setState(() {
           woeids.add(data[i]["woeid"].toString());
@@ -67,8 +69,8 @@ class _ResultState extends State<Result> {
           secret: accessTokenSecret));
 
   Future<void> searchTweets(String woeid) async {
-      trends.clear();
-      volumes.clear();
+    trends.clear();
+    volumes.clear();
     setState(() {
       isLoading = true;
     });
@@ -101,14 +103,15 @@ class _ResultState extends State<Result> {
 
   @override
   void initState() {
-    loadJsonData().then((value) =>  dataToChildren());
+    loadJsonData().then((value) => dataToChildren());
     fake();
-    countryName=widget.country;
+    countryName = widget.country;
     super.initState();
   }
 
   int? x = 0;
   String? countryName;
+
   //String? selectedValue;
   @override
   Widget build(BuildContext context) {
@@ -128,24 +131,33 @@ class _ResultState extends State<Result> {
                 appBar: AppBar(
                   backgroundColor: Colors.grey,
                   centerTitle: true,
-                  title:
-                  DropdownButton2(
+                  title: DropdownButton2(
                     buttonWidth: 200,
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400, color: Colors.black),
+                    style: SettingsPage.isDark
+                        ? const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          )
+                        : const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
                     selectedItemHighlightColor: Colors.blue.shade300,
                     value: countryName,
                     items: countries
                         .map<DropdownMenuItem<String>>(
                           (e) => DropdownMenuItem(
-                        value: e,
-                        child: Text(e),
-                      ),
-                    )
+                            value: e,
+                            child: Text(e),
+                          ),
+                        )
                         .toList(),
                     onChanged: (String? value) => setState(
-                          () {
+                      () {
                         if (value != null) countryName = value;
-                        int index=countries.indexOf(value);
+                        int index = countries.indexOf(value);
                         searchTweets(woeids[index]);
                       },
                     ),
@@ -173,7 +185,8 @@ class _ResultState extends State<Result> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SearchPage(trends[index])));
+                                builder: (context) =>
+                                    SearchPage(trends[index])));
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(
