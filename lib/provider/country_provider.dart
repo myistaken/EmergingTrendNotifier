@@ -65,7 +65,7 @@ class CountryProvider with ChangeNotifier {
   void removeFromList(int index) {
     _counts.removeAt(index);
     ls.removeAt(index);
-    FirebaseFirestore.instance.collection('lists').doc(Authentication().userUID).set({
+    FirebaseFirestore.instance.collection('lists').doc(Authentication().userUID).update({
       'list': ls
     });
     notifyListeners();

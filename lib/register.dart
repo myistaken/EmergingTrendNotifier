@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trenifyv1/dataBase/firestore_data.dart';
@@ -153,7 +154,11 @@ class _MyRegisterState extends State<MyRegister> {
                                         FireStore().addUser(
                                             name: myControllerName.text,
                                             email: myControllerEmail.text,
-                                            password: myControllerPassword.text);
+                                            password: myControllerPassword.text).then((value) =>  FirebaseFirestore.instance.collection('lists').doc(Authentication().userUID).set({
+                                          'favorite':"",
+                                          'list': [],
+                                          'status': 1
+                                        }));
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(

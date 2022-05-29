@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:trenifyv1/home_page.dart';
 import 'package:just_audio/just_audio.dart';
@@ -113,6 +114,18 @@ class _MyLoginState extends State<MyLogin> {
                                     var signing = await Authentication().logIn(
                                         myController.text, myControllerPw.text);
                                     if (signing == 'true') {
+                                      final snapShot = await FirebaseFirestore.instance
+                                          .collection("lists")
+                                          .doc(Authentication().userUID) // varuId in your case
+                                          .get();
+
+                                      if (snapShot == null || !snapShot.exists) {
+                                        FirebaseFirestore.instance.collection('lists').doc(Authentication().userUID).set({
+                                          'favorite':"",
+                                          'list': [],
+                                          'status': 1
+                                        });
+                                      }
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
