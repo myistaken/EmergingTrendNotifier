@@ -1,16 +1,31 @@
-# tw_trend
+Project Title: Twitter Trend Notifier
 
-A new Flutter project.
+Description: This is a mobile application that allows users to view current Twitter trends of a selected country or region and receive notifications at selected time intervals.
 
-## Getting Started
+Installation:
 
-This project is a starting point for a Flutter application.
+Clone the repository to your local machine using git clone https://github.com/{username}/{repository}.git
 
-A few resources to get you started if this is your first Flutter project:
+Ensure you have the latest version of Flutter installed on your machine. If not, follow the instructions on the Flutter website to install it: https://flutter.dev/docs/get-started/install
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Run flutter pub get in your terminal to install all the required dependencies.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Create a Firebase project and link it to your app by following the instructions on the Firebase website: https://firebase.google.com/docs/flutter/setup
+
+Enable the Firebase Authentication and Cloud Firestore features.
+
+Create a Twitter Developer Account to get access to the Twitter API. You can follow the instructions on the Twitter Developer website: https://developer.twitter.com/en/docs/twitter-api/getting-started/about-twitter-api
+
+Create a Discord Bot using NodeJS-DiscordJS by following the instructions on the DiscordJS website: https://discordjs.guide/preparations/setting-up-a-bot-application.html#creating-your-bot
+
+Set up FCM to enable push notifications for the app. Follow the instructions on the Firebase website: https://firebase.google.com/docs/cloud-messaging/android/client
+
+Configure the app settings by updating the config.dart file with the necessary keys and credentials for Firebase, Twitter, and Discord.
+
+Usage:
+
+Launch the app on your emulator or physical device.
+
+Select a country or region to view the current Twitter trends.
+
+Set up notifications by selecting the time interval and enabling notifications.
